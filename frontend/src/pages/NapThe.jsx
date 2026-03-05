@@ -74,7 +74,7 @@ export default function NapThe() {
               {/* Mệnh giá */}
               <div>
                 <label className="text-sm text-gray-400 mb-2 block">Mệnh giá *</label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {THE_MENH.map(t => (
                     <button
                       key={t.menhgia} type="button"

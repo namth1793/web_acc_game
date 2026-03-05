@@ -8,8 +8,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center text-white font-black text-lg">N</div>
-              <span className="text-xl font-black"><span className="text-primary">NSO</span><span className="text-white">Shop</span></span>
+              <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center text-white font-black text-lg">A</div>
+              <span className="text-xl font-black"><span className="text-primary">ACC</span><span className="text-white">NINJA</span></span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
               Chuyên mua bán tài khoản Ninja School Online uy tín số 1 Việt Nam. Giao dịch an toàn, nhanh chóng.
@@ -64,7 +64,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-dark-border mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
-          <p className="text-gray-500 text-sm">© 2024 TiênGame. Tất cả quyền được bảo lưu.</p>
+          <p className="text-gray-500 text-sm">© 2024 ACCNINJA. Tất cả quyền được bảo lưu.</p>
           <p className="text-gray-600 text-xs">Mua bán tài khoản game uy tín, an toàn.</p>
         </div>
       </div>

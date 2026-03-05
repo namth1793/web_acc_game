@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 const NEWS = [
   {
     id: 1,
-    title: 'NSO Shop ra mắt: Mua bán tài khoản Ninja School Online uy tín',
+    title: 'ACCNINJA ra mắt: Mua bán tài khoản Ninja School Online uy tín',
     date: '01/03/2026',
     category: 'Thông báo',
-    excerpt: 'Chào mừng bạn đến với NSO Shop — nền tảng mua bán tài khoản Ninja School Online uy tín, an toàn, giá tốt nhất. Giao dịch tức thì sau khi xác nhận thanh toán.',
+    excerpt: 'Chào mừng bạn đến với ACCNINJA — nền tảng mua bán tài khoản Ninja School Online uy tín, an toàn, giá tốt nhất. Giao dịch tức thì sau khi xác nhận thanh toán.',
     img: '📢',
   },
   {
@@ -35,10 +35,10 @@ const NEWS = [
   },
   {
     id: 5,
-    title: 'Cập nhật: NSO Shop hỗ trợ thanh toán ZaloPay và MoMo',
+    title: 'Cập nhật: ACCNINJA hỗ trợ thanh toán ZaloPay và MoMo',
     date: '20/02/2026',
     category: 'Thông báo',
-    excerpt: 'NSO Shop đã tích hợp thêm phương thức thanh toán qua ví MoMo và ZaloPay, giúp giao dịch nhanh chóng và tiện lợi hơn cho người chơi.',
+    excerpt: 'ACCNINJA đã tích hợp thêm phương thức thanh toán qua ví MoMo và ZaloPay, giúp giao dịch nhanh chóng và tiện lợi hơn cho người chơi.',
     img: '📱',
   },
   {
@@ -64,7 +64,7 @@ export default function TinTuc() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-black text-white mb-2">Tin Tức & Thông Báo</h1>
-        <p className="text-gray-400">Cập nhật tin tức mới nhất về NSO Shop và Ninja School Online</p>
+        <p className="text-gray-400">Cập nhật tin tức mới nhất về ACCNINJA và Ninja School Online</p>
       </div>
 
       {/* Featured news */}

@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 5 * 1024 * 1024, files: 12 },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) cb(null, true);
     else cb(new Error('Chỉ chấp nhận file ảnh.'));
@@ -28,7 +28,7 @@ const upload = multer({
 
 // GET /api/accounts — list with filters & pagination
 router.get('/', (req, res) => {
-  const { game_id, server_id, class_id, min_level, max_level, min_price, max_price,
+  const { game_id, server_id, class_id, min_price, max_price,
           status, search, page = 1, limit = 12, sort = 'newest' } = req.query;
 
   let where = ['1=1'];
@@ -37,8 +37,6 @@ router.get('/', (req, res) => {
   if (game_id) { where.push('a.game_id = ?'); params.push(game_id); }
   if (server_id) { where.push('a.server_id = ?'); params.push(server_id); }
   if (class_id) { where.push('a.class_id = ?'); params.push(class_id); }
-  if (min_level) { where.push('a.level >= ?'); params.push(min_level); }
-  if (max_level) { where.push('a.level <= ?'); params.push(max_level); }
   if (min_price) { where.push('a.price >= ?'); params.push(min_price); }
   if (max_price) { where.push('a.price <= ?'); params.push(max_price); }
   if (status) { where.push('a.status = ?'); params.push(status); }
@@ -50,7 +48,6 @@ router.get('/', (req, res) => {
     oldest: 'a.created_at ASC',
     price_asc: 'a.price ASC',
     price_desc: 'a.price DESC',
-    level_desc: 'a.level DESC',
   };
   const orderBy = orderMap[sort] || orderMap.newest;
 
@@ -123,7 +120,7 @@ router.get('/:id', (req, res) => {
 });
 
 // POST /api/accounts/upload-image — upload account image
-router.post('/upload-image', authMiddleware, adminMiddleware, upload.array('images', 10), (req, res) => {
+router.post('/upload-image', authMiddleware, adminMiddleware, upload.array('images', 12), (req, res) => {
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({ message: 'Không có file ảnh nào được upload.' });
   }

@@ -4,16 +4,18 @@ import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 import {
   FiGrid, FiPackage, FiShoppingBag, FiUsers, FiCreditCard,
-  FiLogOut, FiMenu, FiX, FiHome, FiMonitor
+  FiLogOut, FiMenu, FiX, FiHome, FiMonitor, FiLayers, FiSettings
 } from 'react-icons/fi';
 
 const navItems = [
   { to: '/admin', label: 'Dashboard', icon: FiGrid, end: true },
   { to: '/admin/tai-khoan-game', label: 'Tài Khoản Game', icon: FiMonitor },
   { to: '/admin/game', label: 'Quản Lý Game', icon: FiPackage },
+  { to: '/admin/dich-vu', label: 'Dịch Vụ', icon: FiLayers },
   { to: '/admin/don-hang', label: 'Đơn Hàng', icon: FiShoppingBag },
   { to: '/admin/thanh-toan', label: 'Thanh Toán', icon: FiCreditCard },
   { to: '/admin/nguoi-dung', label: 'Người Dùng', icon: FiUsers },
+  { to: '/admin/cai-dat', label: 'Cài Đặt Popup', icon: FiSettings },
 ];
 
 export default function AdminLayout() {

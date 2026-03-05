@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 import { FiEye, FiEyeOff, FiLogIn } from 'react-icons/fi';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Login() {
   const { login } = useAuth();
@@ -35,7 +35,7 @@ export default function Login() {
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-4">
             <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-black text-xl">T</div>
-            <span className="text-2xl font-black"><span className="text-primary">Tiên</span><span className="text-white">Game</span></span>
+            <span className="text-2xl font-black"><span className="text-primary">ACC</span><span className="text-white">NINJA</span></span>
           </Link>
           <h1 className="text-3xl font-black text-white">Đăng Nhập</h1>
           <p className="text-gray-400 mt-1">Chào mừng bạn trở lại!</p>
@@ -46,7 +46,6 @@ export default function Login() {
           <div className="bg-blue-900/30 border border-blue-800 rounded-lg p-3 mb-6 text-sm">
             <p className="text-blue-400 font-medium mb-1">Tài khoản demo:</p>
             <p className="text-blue-300/80">Admin: admin@tiengame.vn / admin123</p>
-            <p className="text-blue-300/80">User: user@tiengame.vn / user123</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">

@@ -354,4 +354,66 @@ router.put('/users/:id/reset-password', superAdminMiddleware, (req, res) => {
   res.json({ message: 'Đặt lại mật khẩu thành công!' });
 });
 
+// ================== SERVICES MANAGEMENT ==================
+// GET /api/admin/services
+router.get('/services', (req, res) => {
+  const services = db.prepare('SELECT * FROM services ORDER BY sort_order, id').all();
+  res.json(services);
+});
+
+// POST /api/admin/services
+router.post('/services', (req, res) => {
+  const { name, slug, description, base_price, is_price_fixed, category, icon, note, sort_order } = req.body;
+  if (!name || !slug) return res.status(400).json({ message: 'Tên và slug là bắt buộc.' });
+  const r = db.prepare(`
+    INSERT INTO services (name, slug, description, base_price, is_price_fixed, category, icon, note, sort_order)
+    VALUES (?,?,?,?,?,?,?,?,?)
+  `).run(name, slug, description || null, base_price || null, is_price_fixed ? 1 : 0,
+         category || 'game', icon || '🎮', note || null, sort_order || 0);
+  res.status(201).json({ message: 'Thêm dịch vụ thành công!', id: r.lastInsertRowid });
+});
+
+// PUT /api/admin/services/:id
+router.put('/services/:id', (req, res) => {
+  const { name, slug, description, base_price, is_price_fixed, category, icon, note, sort_order, is_active } = req.body;
+  db.prepare(`
+    UPDATE services SET name=?, slug=?, description=?, base_price=?, is_price_fixed=?,
+    category=?, icon=?, note=?, sort_order=?, is_active=? WHERE id=?
+  `).run(name, slug, description || null, base_price || null, is_price_fixed ? 1 : 0,
+         category || 'game', icon || '🎮', note || null, sort_order || 0,
+         is_active !== undefined ? (is_active ? 1 : 0) : 1, req.params.id);
+  res.json({ message: 'Cập nhật dịch vụ thành công!' });
+});
+
+// DELETE /api/admin/services/:id
+router.delete('/services/:id', (req, res) => {
+  db.prepare('DELETE FROM services WHERE id = ?').run(req.params.id);
+  res.json({ message: 'Đã xóa dịch vụ.' });
+});
+
+// ================== POPUP SETTINGS ==================
+// GET /api/admin/settings/popup
+router.get('/settings/popup', (req, res) => {
+  const rows = db.prepare('SELECT * FROM site_settings').all();
+  const s = {};
+  rows.forEach(r => { s[r.key] = r.value; });
+  res.json({
+    enabled: s.popup_enabled === '1',
+    title: s.popup_title || '',
+    content: s.popup_content || '',
+    news: s.popup_news ? JSON.parse(s.popup_news) : [],
+  });
+});
+
+// PUT /api/admin/settings/popup
+router.put('/settings/popup', (req, res) => {
+  const { enabled, title, content, news } = req.body;
+  const upsert = db.prepare('INSERT OR REPLACE INTO site_settings (key, value) VALUES (?,?)');
+  upsert.run('popup_enabled', enabled ? '1' : '0');
+  upsert.run('popup_title', title || '');
+  upsert.run('popup_content', content || '');
+  upsert.run('popup_news', JSON.stringify(news || []));
+  res.json({ message: 'Cập nhật popup thành công!' });
+});
+
 module.exports = router;

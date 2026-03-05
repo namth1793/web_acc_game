@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 
 const NAV_ITEMS = [
   { to: '/', label: 'Trang Chủ', end: true },
+  { to: '/dich-vu', label: 'Dịch Vụ' },
   { to: '/nap-the', label: 'Nạp Thẻ' },
   { to: '/tin-tuc', label: 'Tin Tức' },
   { to: '/nap-atm-vi', label: 'Nạp ATM - Ví' },
@@ -34,11 +35,11 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
             <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center text-white font-black text-lg group-hover:bg-primary-dark transition-colors">
-              N
+              A
             </div>
             <span className="text-xl font-black">
-              <span className="text-primary">NSO</span>
-              <span className="text-white">Shop</span>
+              <span className="text-primary">ACC</span>
+              <span className="text-white">NINJA</span>
             </span>
           </Link>
 

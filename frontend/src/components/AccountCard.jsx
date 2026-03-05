@@ -8,10 +8,30 @@ export function formatPrice(p) {
 }
 
 const CLASS_COLORS = {
-  'Kiếm Sĩ': 'text-red-400 bg-red-900/30 border-red-800',
-  'Thuật Sĩ': 'text-purple-400 bg-purple-900/30 border-purple-800',
-  'Cung Thủ': 'text-green-400 bg-green-900/30 border-green-800',
-  'Ninja':    'text-yellow-400 bg-yellow-900/30 border-yellow-800',
+  'Kunai': 'text-orange-400 bg-orange-900/30 border-orange-800',
+  'Kiếm':  'text-red-400 bg-red-900/30 border-red-800',
+  'Tiêu':  'text-cyan-400 bg-cyan-900/30 border-cyan-800',
+  'Đao':   'text-purple-400 bg-purple-900/30 border-purple-800',
+  'Quạt':  'text-pink-400 bg-pink-900/30 border-pink-800',
+  'Cung':  'text-green-400 bg-green-900/30 border-green-800',
+};
+
+const CLASS_BG = {
+  'Kunai': 'from-orange-950 via-slate-900 to-gray-950',
+  'Kiếm':  'from-red-950 via-slate-900 to-gray-950',
+  'Tiêu':  'from-cyan-950 via-slate-900 to-gray-950',
+  'Đao':   'from-purple-950 via-slate-900 to-gray-950',
+  'Quạt':  'from-pink-950 via-slate-900 to-gray-950',
+  'Cung':  'from-green-950 via-slate-900 to-gray-950',
+};
+
+const CLASS_GLOW = {
+  'Kunai': 'rgba(249,115,22,0.25)',
+  'Kiếm':  'rgba(239,68,68,0.25)',
+  'Tiêu':  'rgba(6,182,212,0.25)',
+  'Đao':   'rgba(168,85,247,0.25)',
+  'Quạt':  'rgba(236,72,153,0.25)',
+  'Cung':  'rgba(34,197,94,0.25)',
 };
 
 function serverColor(name) {
@@ -21,7 +41,8 @@ function serverColor(name) {
 }
 
 function classIcon(name) {
-  return name === 'Kiếm Sĩ' ? '⚔️' : name === 'Thuật Sĩ' ? '🔮' : name === 'Cung Thủ' ? '🏹' : '🥷';
+  const icons = { 'Kunai':'🗡️', 'Kiếm':'⚔️', 'Tiêu':'🎯', 'Đao':'🔱', 'Quạt':'🪭', 'Cung':'🏹' };
+  return icons[name] || '🥷';
 }
 
 export default function AccountCard({ account }) {
@@ -34,16 +55,8 @@ export default function AccountCard({ account }) {
   const discount = account.original_price > account.price
     ? Math.round((1 - account.price / account.original_price) * 100) : 0;
 
-  const classBg = account.class_name === 'Kiếm Sĩ'  ? 'from-red-950 via-slate-900 to-gray-950' :
-                  account.class_name === 'Thuật Sĩ'  ? 'from-purple-950 via-slate-900 to-gray-950' :
-                  account.class_name === 'Cung Thủ'  ? 'from-green-950 via-slate-900 to-gray-950' :
-                  account.class_name === 'Ninja'     ? 'from-yellow-950 via-slate-900 to-gray-950' :
-                  'from-orange-950 via-slate-900 to-gray-950';
-
-  const classGlow = account.class_name === 'Kiếm Sĩ'  ? 'rgba(239,68,68,0.25)' :
-                    account.class_name === 'Thuật Sĩ'  ? 'rgba(168,85,247,0.25)' :
-                    account.class_name === 'Cung Thủ'  ? 'rgba(34,197,94,0.25)' :
-                    'rgba(234,179,8,0.25)';
+  const classBg   = CLASS_BG[account.class_name]   || 'from-orange-950 via-slate-900 to-gray-950';
+  const classGlow = CLASS_GLOW[account.class_name] || 'rgba(249,115,22,0.25)';
 
   useEffect(() => {
     try {
@@ -97,9 +110,6 @@ export default function AccountCard({ account }) {
         ) : (
           <div className={`w-full h-full flex items-center justify-center relative bg-gradient-to-br ${classBg}`}>
             <div className="absolute inset-0" style={{background:`radial-gradient(circle at 50% 60%, ${classGlow}, transparent 65%)`}}/>
-            <div className="absolute bottom-0 left-1 text-5xl opacity-[0.04] font-black select-none" style={{fontFamily:'serif'}}>
-              {account.class_name === 'Kiếm Sĩ' ? '剣' : account.class_name === 'Thuật Sĩ' ? '術' : account.class_name === 'Cung Thủ' ? '弓' : '忍'}
-            </div>
             <div className="absolute top-1 right-1 opacity-[0.08]">
               <Shuriken size={46} className="text-white spin-slow"/>
             </div>
@@ -107,11 +117,6 @@ export default function AccountCard({ account }) {
               <div className="text-5xl mb-1.5 group-hover:scale-110 transition-transform drop-shadow-lg">
                 {classIcon(account.class_name)}
               </div>
-              {account.level && (
-                <div className="bg-black/70 backdrop-blur-sm rounded-full px-3 py-0.5 text-xs font-black text-yellow-300 border border-yellow-900/60 shadow-lg">
-                  LV {account.level}
-                </div>
-              )}
             </div>
             {account.status === 'sold' && (
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -140,17 +145,6 @@ export default function AccountCard({ account }) {
             </span>
           )}
         </div>
-        {account.level && (
-          <div className="mb-2.5">
-            <div className="flex justify-between mb-1">
-              <span className="text-gray-600 text-xs">Level</span>
-              <span className="text-yellow-400 text-xs font-bold">{account.level}/250</span>
-            </div>
-            <div className="level-bar-bg h-1">
-              <div className="level-bar-fill" style={{width:`${Math.min(100,(account.level/250)*100)}%`}}/>
-            </div>
-          </div>
-        )}
         <div className="flex items-end justify-between mt-auto pt-2.5 border-t border-gray-800/50">
           <div>
             <p className="text-primary font-black text-xl price-glow leading-none">{formatPrice(account.price)}</p>

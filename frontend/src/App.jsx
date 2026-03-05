@@ -6,6 +6,7 @@ import { CartProvider } from './contexts/CartContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
+import PopupAnnouncement from './components/PopupAnnouncement';
 
 // Public pages
 import Home from './pages/Home';
@@ -19,6 +20,7 @@ import Profile from './pages/Profile';
 import NapThe from './pages/NapThe';
 import NapATMVi from './pages/NapATMVi';
 import TinTuc from './pages/TinTuc';
+import Services from './pages/Services';
 
 // Admin pages
 import AdminLayout from './pages/admin/AdminLayout';
@@ -28,6 +30,8 @@ import AdminGames from './pages/admin/AdminGames';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminPayments from './pages/admin/AdminPayments';
+import AdminServices from './pages/admin/AdminServices';
+import AdminSettings from './pages/admin/AdminSettings';
 
 function PublicLayout({ children }) {
   return (
@@ -51,6 +55,7 @@ export default function App() {
               success: { iconTheme: { primary: '#f97316', secondary: '#fff' } }
             }}
           />
+          <PopupAnnouncement />
           <Routes>
             {/* Public routes */}
             <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
@@ -59,6 +64,7 @@ export default function App() {
             <Route path="/nap-the" element={<PublicLayout><NapThe /></PublicLayout>} />
             <Route path="/nap-atm-vi" element={<PublicLayout><NapATMVi /></PublicLayout>} />
             <Route path="/tin-tuc" element={<PublicLayout><TinTuc /></PublicLayout>} />
+            <Route path="/dich-vu" element={<PublicLayout><Services /></PublicLayout>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
@@ -75,6 +81,8 @@ export default function App() {
               <Route path="don-hang" element={<AdminOrders />} />
               <Route path="nguoi-dung" element={<AdminUsers />} />
               <Route path="thanh-toan" element={<AdminPayments />} />
+              <Route path="dich-vu" element={<AdminServices />} />
+              <Route path="cai-dat" element={<AdminSettings />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -10,10 +10,12 @@ import { Shuriken, NinjaMask, NinjaVillageBadge } from '../components/NinjaArt';
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 const CLASS_COLORS = {
-  'Kiếm Sĩ': { text: 'text-red-400',    bg: 'from-red-950 via-slate-900 to-gray-950',    glow: 'rgba(239,68,68,0.3)',    tag: 'text-red-400 bg-red-900/30 border-red-800',    kanji: '剣' },
-  'Thuật Sĩ': { text: 'text-purple-400', bg: 'from-purple-950 via-slate-900 to-gray-950', glow: 'rgba(168,85,247,0.3)',   tag: 'text-purple-400 bg-purple-900/30 border-purple-800', kanji: '術' },
-  'Cung Thủ': { text: 'text-green-400',  bg: 'from-green-950 via-slate-900 to-gray-950',  glow: 'rgba(34,197,94,0.3)',   tag: 'text-green-400 bg-green-900/30 border-green-800',   kanji: '弓' },
-  'Ninja':    { text: 'text-yellow-400', bg: 'from-yellow-950 via-slate-900 to-gray-950', glow: 'rgba(234,179,8,0.3)',   tag: 'text-yellow-400 bg-yellow-900/30 border-yellow-800', kanji: '忍' },
+  'Kunai': { text: 'text-orange-400', bg: 'from-orange-950 via-slate-900 to-gray-950', glow: 'rgba(249,115,22,0.3)',  tag: 'text-orange-400 bg-orange-900/30 border-orange-800', kanji: '苦' },
+  'Kiếm':  { text: 'text-red-400',    bg: 'from-red-950 via-slate-900 to-gray-950',    glow: 'rgba(239,68,68,0.3)',   tag: 'text-red-400 bg-red-900/30 border-red-800',          kanji: '剣' },
+  'Tiêu':  { text: 'text-cyan-400',   bg: 'from-cyan-950 via-slate-900 to-gray-950',   glow: 'rgba(6,182,212,0.3)',   tag: 'text-cyan-400 bg-cyan-900/30 border-cyan-800',        kanji: '矢' },
+  'Đao':   { text: 'text-purple-400', bg: 'from-purple-950 via-slate-900 to-gray-950', glow: 'rgba(168,85,247,0.3)',  tag: 'text-purple-400 bg-purple-900/30 border-purple-800',  kanji: '刀' },
+  'Quạt':  { text: 'text-pink-400',   bg: 'from-pink-950 via-slate-900 to-gray-950',   glow: 'rgba(236,72,153,0.3)', tag: 'text-pink-400 bg-pink-900/30 border-pink-800',        kanji: '扇' },
+  'Cung':  { text: 'text-green-400',  bg: 'from-green-950 via-slate-900 to-gray-950',  glow: 'rgba(34,197,94,0.3)',  tag: 'text-green-400 bg-green-900/30 border-green-800',     kanji: '弓' },
 };
 const DEFAULT_CLASS = { text: 'text-orange-400', bg: 'from-orange-950 via-slate-900 to-gray-950', glow: 'rgba(249,115,22,0.3)', tag: 'text-orange-400 bg-orange-900/30 border-orange-800', kanji: '忍' };
 
@@ -23,7 +25,8 @@ function serverColor(name) {
   return 'text-blue-300 bg-blue-900/40 border-blue-800';
 }
 function classIcon(name) {
-  return name === 'Kiếm Sĩ' ? '⚔️' : name === 'Thuật Sĩ' ? '🔮' : name === 'Cung Thủ' ? '🏹' : '🥷';
+  const icons = { 'Kunai':'🗡️', 'Kiếm':'⚔️', 'Tiêu':'🎯', 'Đao':'🔱', 'Quạt':'🪭', 'Cung':'🏹' };
+  return icons[name] || '🥷';
 }
 
 // ── Skeleton ──────────────────────────────────────────────────────────────────
@@ -93,12 +96,12 @@ export default function AccountDetail() {
     <div className="min-h-screen pb-16">
 
       {/* ── HERO BANNER ─────────────────────────────────────────────────────── */}
-      <div className={`relative overflow-hidden bg-gradient-to-br ${cls.bg}`} style={{minHeight: 260}}>
+      <div className={`relative overflow-hidden bg-gradient-to-br ${cls.bg}`}>
         {/* Glow */}
         <div className="absolute inset-0 pointer-events-none"
           style={{background:`radial-gradient(ellipse at 60% 50%, ${cls.glow}, transparent 65%)`}}/>
         {/* Kanji watermark */}
-        <div className="absolute right-6 top-2 text-[220px] leading-none font-black opacity-[0.03] select-none" style={{fontFamily:'serif'}}>
+        <div className="absolute right-6 top-2 text-[100px] sm:text-[220px] leading-none font-black opacity-[0.03] select-none" style={{fontFamily:'serif'}}>
           {cls.kanji}
         </div>
         {/* Spinning shurikens */}
@@ -182,13 +185,7 @@ export default function AccountDetail() {
                     <div className="float-slow inline-block">
                       <NinjaMask size={110}/>
                     </div>
-                    {account.level && (
-                      <div className="mt-3 inline-flex items-center gap-2 bg-black/70 backdrop-blur-sm rounded-full px-4 py-1 border border-yellow-900/60">
-                        <span className="text-yellow-300 font-black text-sm">LV {account.level}</span>
-                        <span className="text-gray-600 text-xs">/ 250</span>
-                      </div>
-                    )}
-                  </div>
+                    </div>
                   {isSold && (
                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-20">
                       <span className="text-red-400 font-black text-2xl border-2 border-red-600/80 px-8 py-2 rounded rotate-[-10deg] bg-black/40">
@@ -232,16 +229,6 @@ export default function AccountDetail() {
 
             {/* Stats grid */}
             <div className="grid grid-cols-2 gap-3">
-              {account.level && (
-                <div className="rounded-xl border border-gray-800 bg-gray-900/40 p-4">
-                  <p className="text-xs text-gray-500 mb-2 uppercase tracking-wider font-semibold">Cấp độ</p>
-                  <p className={`font-black text-2xl ${cls.text} leading-none mb-2`}>Lv. {account.level}</p>
-                  <div className="level-bar-bg h-1.5">
-                    <div className="level-bar-fill" style={{width:`${Math.min(100,(account.level/250)*100)}%`}}/>
-                  </div>
-                  <p className="text-gray-600 text-xs mt-1">{account.level}/250 max</p>
-                </div>
-              )}
               <div className="rounded-xl border border-gray-800 bg-gray-900/40 p-4">
                 <p className="text-xs text-gray-500 mb-2 uppercase tracking-wider font-semibold">Trạng thái</p>
                 {account.status === 'available' && (
@@ -301,7 +288,7 @@ export default function AccountDetail() {
               <div className="px-5 pt-5 pb-3">
                 <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Giá bán</p>
                 <div className="flex items-end gap-3">
-                  <span className="text-5xl font-black text-primary price-glow leading-none">{formatPrice(account.price)}</span>
+                  <span className="text-3xl sm:text-5xl font-black text-primary price-glow leading-none">{formatPrice(account.price)}</span>
                   {discount > 0 && (
                     <div className="pb-1">
                       <span className="text-gray-500 line-through text-lg block">{formatPrice(account.original_price)}</span>

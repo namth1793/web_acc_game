@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import Pagination from '../components/Pagination';
-import { Shuriken, NinjaMask, Kunai, NinjaVillageBadge } from '../components/NinjaArt';
+import { Shuriken, NinjaVillageBadge } from '../components/NinjaArt';
+import bannerImg from '../assets/banner.jpg';
 import { FiSearch, FiFilter, FiX, FiZap, FiShield, FiTrendingUp } from 'react-icons/fi';
 
 // ── Ticker ──
@@ -23,10 +24,12 @@ const STATS = [
 ];
 
 const CLASS_COLORS = {
-  'Kiếm Sĩ': 'text-red-400 bg-red-900/30 border-red-800',
-  'Thuật Sĩ': 'text-purple-400 bg-purple-900/30 border-purple-800',
-  'Cung Thủ': 'text-green-400 bg-green-900/30 border-green-800',
-  'Ninja':    'text-yellow-400 bg-yellow-900/30 border-yellow-800',
+  'Kunai': 'text-orange-400 bg-orange-900/30 border-orange-800',
+  'Kiếm':  'text-red-400 bg-red-900/30 border-red-800',
+  'Tiêu':  'text-cyan-400 bg-cyan-900/30 border-cyan-800',
+  'Đao':   'text-purple-400 bg-purple-900/30 border-purple-800',
+  'Quạt':  'text-pink-400 bg-pink-900/30 border-pink-800',
+  'Cung':  'text-green-400 bg-green-900/30 border-green-800',
 };
 
 function serverColor(name) {
@@ -40,7 +43,8 @@ export function formatPrice(p) {
 }
 
 function classIcon(name) {
-  return name === 'Kiếm Sĩ' ? '⚔️' : name === 'Thuật Sĩ' ? '🔮' : name === 'Cung Thủ' ? '🏹' : '🥷';
+  const icons = { 'Kunai':'🗡️', 'Kiếm':'⚔️', 'Tiêu':'🎯', 'Đao':'🔱', 'Quạt':'🪭', 'Cung':'🏹' };
+  return icons[name] || '🥷';
 }
 
 // ── NSO Card ──
@@ -81,16 +85,10 @@ function NSOCard({ account }) {
     } catch {}
   };
 
-  const classBg = account.class_name === 'Kiếm Sĩ'  ? 'from-red-950 via-slate-900 to-gray-950' :
-                  account.class_name === 'Thuật Sĩ'  ? 'from-purple-950 via-slate-900 to-gray-950' :
-                  account.class_name === 'Cung Thủ'  ? 'from-green-950 via-slate-900 to-gray-950' :
-                  account.class_name === 'Ninja'     ? 'from-yellow-950 via-slate-900 to-gray-950' :
-                  'from-orange-950 via-slate-900 to-gray-950';
-
-  const classGlow = account.class_name === 'Kiếm Sĩ'  ? 'rgba(239,68,68,0.25)' :
-                    account.class_name === 'Thuật Sĩ'  ? 'rgba(168,85,247,0.25)' :
-                    account.class_name === 'Cung Thủ'  ? 'rgba(34,197,94,0.25)' :
-                    'rgba(234,179,8,0.25)';
+  const CLASS_BG_MAP = { 'Kunai':'from-orange-950 via-slate-900 to-gray-950', 'Kiếm':'from-red-950 via-slate-900 to-gray-950', 'Tiêu':'from-cyan-950 via-slate-900 to-gray-950', 'Đao':'from-purple-950 via-slate-900 to-gray-950', 'Quạt':'from-pink-950 via-slate-900 to-gray-950', 'Cung':'from-green-950 via-slate-900 to-gray-950' };
+  const CLASS_GLOW_MAP = { 'Kunai':'rgba(249,115,22,0.25)', 'Kiếm':'rgba(239,68,68,0.25)', 'Tiêu':'rgba(6,182,212,0.25)', 'Đao':'rgba(168,85,247,0.25)', 'Quạt':'rgba(236,72,153,0.25)', 'Cung':'rgba(34,197,94,0.25)' };
+  const classBg   = CLASS_BG_MAP[account.class_name]   || 'from-orange-950 via-slate-900 to-gray-950';
+  const classGlow = CLASS_GLOW_MAP[account.class_name] || 'rgba(249,115,22,0.25)';
 
   return (
     <Link to={`/tai-khoan/${account.id}`} className="acc-card rounded-xl overflow-hidden flex flex-col group relative shine-effect">
@@ -114,26 +112,14 @@ function NSOCard({ account }) {
             className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ${account.status === 'sold' ? 'grayscale opacity-50' : ''}`}/>
         ) : (
           <div className={`w-full h-full flex items-center justify-center relative bg-gradient-to-br ${classBg}`}>
-            {/* Glow */}
             <div className="absolute inset-0" style={{background:`radial-gradient(circle at 50% 60%, ${classGlow}, transparent 65%)`}}/>
-            {/* Kanji watermark */}
-            <div className="absolute bottom-0 left-1 text-5xl opacity-[0.04] font-black select-none" style={{fontFamily:'serif'}}>
-              {account.class_name === 'Kiếm Sĩ' ? '剣' : account.class_name === 'Thuật Sĩ' ? '術' : account.class_name === 'Cung Thủ' ? '弓' : '忍'}
-            </div>
-            {/* Shuriken bg */}
             <div className="absolute top-1 right-1 opacity-[0.08]">
               <Shuriken size={46} className="text-white spin-slow"/>
             </div>
-            {/* Main content */}
             <div className={`relative z-10 text-center ${account.status === 'sold' ? 'opacity-40' : ''}`}>
               <div className="text-5xl mb-1.5 group-hover:scale-110 transition-transform drop-shadow-lg">
                 {classIcon(account.class_name)}
               </div>
-              {account.level && (
-                <div className="bg-black/70 backdrop-blur-sm rounded-full px-3 py-0.5 text-xs font-black text-yellow-300 border border-yellow-900/60 shadow-lg">
-                  LV {account.level}
-                </div>
-              )}
             </div>
             {account.status === 'sold' && (
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -162,17 +148,6 @@ function NSOCard({ account }) {
             </span>
           )}
         </div>
-        {account.level && (
-          <div className="mb-2.5">
-            <div className="flex justify-between mb-1">
-              <span className="text-gray-600 text-xs">Level</span>
-              <span className="text-yellow-400 text-xs font-bold">{account.level}/250</span>
-            </div>
-            <div className="level-bar-bg h-1">
-              <div className="level-bar-fill" style={{width:`${Math.min(100,(account.level/250)*100)}%`}}/>
-            </div>
-          </div>
-        )}
         <div className="flex items-end justify-between mt-auto pt-2.5 border-t border-gray-800/50">
           <div>
             <p className="text-primary font-black text-xl price-glow leading-none">{formatPrice(account.price)}</p>
@@ -217,9 +192,7 @@ function RecentTransactions({ items }) {
     <div className="overflow-y-auto" style={{maxHeight: 44*8}}>
       {items.map((t, i) => (
         <div key={i} className="flex items-center gap-3 px-4 py-2.5 border-b border-gray-800/60 hover:bg-gray-800/20 transition-colors">
-          <span className="text-lg flex-shrink-0">
-            {t.class_name === 'Kiếm Sĩ' ? '⚔️' : t.class_name === 'Thuật Sĩ' ? '🔮' : t.class_name === 'Cung Thủ' ? '🏹' : '🥷'}
-          </span>
+          <span className="text-lg flex-shrink-0">{classIcon(t.class_name)}</span>
           <div className="flex-1 min-w-0">
             <p className="text-white text-xs font-semibold truncate">{t.buyer_name} vừa mua</p>
             <p className="text-gray-500 text-xs truncate">{t.title}</p>
@@ -294,10 +267,10 @@ export default function Home() {
       </div>
 
       {/* ── HERO ── */}
-      <div className="relative overflow-hidden hero-noise" style={{background:'linear-gradient(135deg,#0a0f1a 0%,#0f172a 40%,#1a0a0a 100%)',minHeight:400}}>
+      <div className="relative overflow-hidden hero-noise" style={{background:'linear-gradient(135deg,#0a0f1a 0%,#0f172a 40%,#1a0a0a 100%)'}}>
         {/* BG deco */}
         <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-          <div className="absolute -right-6 top-2 text-[260px] leading-none font-black opacity-[0.025] text-orange-400 select-none" style={{fontFamily:'serif'}}>忍</div>
+          <div className="absolute -right-6 top-2 text-[120px] sm:text-[260px] leading-none font-black opacity-[0.025] text-orange-400 select-none" style={{fontFamily:'serif'}}>忍</div>
           <div className="absolute top-10 left-10 text-primary/10 float"><Shuriken size={55} className="spin-slow"/></div>
           <div className="absolute bottom-8 left-1/4 text-primary/8 float" style={{animationDelay:'1.5s'}}><Shuriken size={30} className="spin-slow-rev"/></div>
           <div className="absolute top-14 right-1/3 text-red-500/8 float" style={{animationDelay:'3s'}}><Shuriken size={42} className="spin-slow"/></div>
@@ -309,7 +282,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div>
               <NinjaVillageBadge label="Ninja School Online Shop" className="mb-4 fade-in-up"/>
-              <h1 className="text-4xl sm:text-6xl font-black text-white leading-tight mb-4 fade-in-up-2 title-glow">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-4 fade-in-up-2 title-glow">
                 MUA BÁN TÀI KHOẢN<br/>
                 <span className="text-primary">NINJA SCHOOL</span><br/>
                 <span className="text-2xl sm:text-3xl text-gray-400 font-bold">Uy Tín · Nhanh · Giá Tốt</span>
@@ -341,28 +314,8 @@ export default function Home() {
             </div>
 
             {/* Hero art */}
-            <div className="hidden lg:flex items-center justify-center">
-              <div className="relative">
-                <div className="absolute inset-0 rounded-full opacity-25 pointer-events-none"
-                  style={{background:'radial-gradient(circle,rgba(249,115,22,0.5) 0%,transparent 65%)',transform:'scale(1.7)'}}/>
-                <div className="absolute inset-4 rounded-full border border-primary/15 spin-slow pointer-events-none"/>
-                <div className="absolute inset-8 rounded-full border border-red-900/20 spin-slow-rev pointer-events-none"/>
-                <div className="float-slow relative z-10 drop-shadow-2xl"><NinjaMask size={170}/></div>
-                <div className="absolute -top-3 -right-3 float" style={{animationDelay:'0.8s'}}>
-                  <Shuriken size={32} className="text-primary spin-slow opacity-80"/>
-                </div>
-                <div className="absolute -bottom-2 -left-5 float" style={{animationDelay:'2s'}}>
-                  <Kunai size={26} className="text-gray-400 opacity-50"/>
-                </div>
-                <div className="absolute -right-20 top-1/4 bg-gray-900 border border-gray-800 rounded-xl p-2.5 text-center shadow-2xl">
-                  <p className="text-yellow-400 font-black text-lg leading-none">500+</p>
-                  <p className="text-gray-500 text-xs mt-0.5">Đã bán</p>
-                </div>
-                <div className="absolute -left-20 bottom-1/4 bg-gray-900 border border-green-900/50 rounded-xl p-2.5 text-center shadow-2xl">
-                  <p className="text-green-400 font-black text-base leading-none">&lt;5ph</p>
-                  <p className="text-gray-500 text-xs mt-0.5">Giao acc</p>
-                </div>
-              </div>
+            <div className="flex items-center justify-center mt-6 lg:mt-0">
+              <img src={bannerImg} alt="ACCNINJA Banner" className="rounded-2xl shadow-2xl max-h-64 sm:max-h-80 w-full object-cover"/>
             </div>
           </div>
         </div>
@@ -487,7 +440,6 @@ export default function Home() {
                   <option value="newest">Mới nhất</option>
                   <option value="price_asc">Giá thấp → cao</option>
                   <option value="price_desc">Giá cao → thấp</option>
-                  <option value="level_desc">Level cao nhất</option>
                 </select>
               </div>
             </div>
@@ -524,7 +476,7 @@ export default function Home() {
         {/* ── TRUST ── */}
         <div className="mt-14 gradient-border p-6 sm:p-8">
           <div className="text-center mb-7">
-            <NinjaVillageBadge label="Tại sao chọn NSO Shop?" className="mb-3"/>
+            <NinjaVillageBadge label="Tại sao chọn ACCNINJA?" className="mb-3"/>
             <h2 className="text-2xl font-black text-white">Giao Dịch Uy Tín · Bảo Đảm <span className="text-primary">100%</span></h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
@@ -540,26 +492,6 @@ export default function Home() {
                 <p className="text-gray-500 text-xs leading-relaxed">{f.desc}</p>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* ── CTA ── */}
-        <div className="mt-8 rounded-2xl overflow-hidden relative"
-          style={{background:'linear-gradient(135deg,#7c2d12 0%,#450a0a 50%,#1c1917 100%)'}}>
-          <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-            <div className="absolute right-6 top-3 opacity-10 float"><NinjaMask size={110}/></div>
-            <div className="absolute left-3 bottom-1 opacity-8"><Shuriken size={55} className="text-orange-400 spin-slow"/></div>
-          </div>
-          <div className="relative p-7 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-5">
-            <div>
-              <p className="text-orange-300 text-sm font-semibold mb-1">🎁 Ưu đãi đặc biệt hôm nay</p>
-              <h3 className="text-2xl font-black text-white">Nạp thẻ nhận <span className="text-yellow-400 neon-gold">BONUS</span> xu khủng!</h3>
-              <p className="text-gray-400 text-sm mt-1">Nạp từ 200K — nhận thêm tới +400K xu miễn phí</p>
-            </div>
-            <div className="flex gap-3 flex-shrink-0">
-              <Link to="/nap-the" className="btn-primary flex items-center gap-2 whitespace-nowrap py-3 px-6">💳 Nạp thẻ ngay</Link>
-              <Link to="/nap-atm-vi" className="btn-outline py-3 px-5 whitespace-nowrap">🏦 ATM / Ví</Link>
-            </div>
           </div>
         </div>
 

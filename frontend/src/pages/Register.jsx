@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 import { FiEye, FiEyeOff, FiUserPlus } from 'react-icons/fi';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Register() {
   const { register } = useAuth();
@@ -37,7 +37,7 @@ export default function Register() {
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-4">
             <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-black text-xl">T</div>
-            <span className="text-2xl font-black"><span className="text-primary">Tiên</span><span className="text-white">Game</span></span>
+            <span className="text-2xl font-black"><span className="text-primary">ACC</span><span className="text-white">NINJA</span></span>
           </Link>
           <h1 className="text-3xl font-black text-white">Đăng Ký</h1>
           <p className="text-gray-400 mt-1">Tạo tài khoản để mua game dễ hơn</p>
