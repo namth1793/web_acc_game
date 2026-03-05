@@ -1,11 +1,18 @@
 import { useState } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 import {
-  FiGrid, FiPackage, FiShoppingBag, FiUsers, FiCreditCard,
-  FiLogOut, FiMenu, FiX, FiHome, FiMonitor, FiLayers, FiSettings
+  FiCreditCard,
+  FiGrid,
+  FiHome,
+  FiLayers,
+  FiLogOut, FiMenu,
+  FiMonitor,
+  FiPackage,
+  FiSettings,
+  FiShoppingBag, FiUsers
 } from 'react-icons/fi';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 const navItems = [
   { to: '/admin', label: 'Dashboard', icon: FiGrid, end: true },
@@ -36,7 +43,7 @@ export default function AdminLayout() {
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center text-white font-black text-lg">T</div>
           <div>
-            <p className="font-black text-white text-sm"><span className="text-primary">Tiên</span>Game</p>
+            <p className="font-black text-white text-sm"><span className="text-primary">ACC</span>NINJA</p>
             <p className="text-xs text-gray-500">Admin Panel</p>
           </div>
         </div>

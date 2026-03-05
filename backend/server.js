@@ -6,13 +6,10 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-const allowedOrigins = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
-  : ['http://localhost:5173', 'http://localhost:3000'];
-app.use(cors({ origin: allowedOrigins, credentials: true }));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+// Middleware — allow all origins so admin can upload from any device/network
+app.use(cors({ origin: true, credentials: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Static files (uploaded images)
 const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, 'uploads');
@@ -41,7 +38,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Lỗi server nội bộ. Vui lòng thử lại.' });
 });
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Server đang chạy tại http://localhost:${PORT}`);
   console.log(`📦 Admin panel API: http://localhost:${PORT}/api/admin`);
   console.log(`📖 Health check: http://localhost:${PORT}/api/health`);

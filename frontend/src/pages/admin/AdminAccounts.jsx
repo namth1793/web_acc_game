@@ -72,7 +72,8 @@ export default function AdminAccounts() {
       const formData = new FormData();
       toUpload.forEach(f => formData.append('images', f));
       const res = await api.post('/accounts/upload-image', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
+        timeout: 60000,
       });
       setForm(f => ({ ...f, images: [...f.images, ...res.data.urls] }));
       toast.success(`Đã upload ${res.data.urls.length} ảnh!`);

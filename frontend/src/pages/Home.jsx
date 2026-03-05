@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import Pagination from '../components/Pagination';
 import { Shuriken, NinjaVillageBadge } from '../components/NinjaArt';
@@ -49,7 +49,7 @@ function classIcon(name) {
 
 // ── NSO Card ──
 function NSOCard({ account }) {
-  const [inCart, setInCart] = useState(false);
+  const navigate = useNavigate();
   const classColor = CLASS_COLORS[account.class_name] || 'text-gray-400 bg-gray-800 border-gray-700';
   const isVIP = account.server_name?.includes('VIP');
   const isNew = account.server_name?.includes('Mới');
@@ -57,32 +57,18 @@ function NSOCard({ account }) {
   const discount = account.original_price > account.price
     ? Math.round((1 - account.price / account.original_price) * 100) : 0;
 
-  useEffect(() => {
-    try {
-      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      setInCart(cart.some(i => i.id === account.id));
-    } catch {}
-    const onStorage = () => {
-      try {
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        setInCart(cart.some(i => i.id === account.id));
-      } catch {}
-    };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, [account.id]);
-
-  const handleAddToCart = (e) => {
+  const handleBuyNow = (e) => {
     e.preventDefault();
     if (account.status !== 'available') return;
     try {
       const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      if (cart.some(i => i.id === account.id)) return;
-      cart.push(account);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      setInCart(true);
-      window.dispatchEvent(new Event('storage'));
+      if (!cart.some(i => i.id === account.id)) {
+        cart.push(account);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        window.dispatchEvent(new Event('storage'));
+      }
     } catch {}
+    navigate('/thanh-toan');
   };
 
   const CLASS_BG_MAP = { 'Kunai':'from-orange-950 via-slate-900 to-gray-950', 'Kiếm':'from-red-950 via-slate-900 to-gray-950', 'Tiêu':'from-cyan-950 via-slate-900 to-gray-950', 'Đao':'from-purple-950 via-slate-900 to-gray-950', 'Quạt':'from-pink-950 via-slate-900 to-gray-950', 'Cung':'from-green-950 via-slate-900 to-gray-950' };
@@ -91,52 +77,54 @@ function NSOCard({ account }) {
   const classGlow = CLASS_GLOW_MAP[account.class_name] || 'rgba(249,115,22,0.25)';
 
   return (
-    <Link to={`/tai-khoan/${account.id}`} className="acc-card rounded-xl overflow-hidden flex flex-col group relative shine-effect">
-      {/* Badges */}
-      <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
-        {isVIP && <span className="badge bg-yellow-900/90 border border-yellow-600 text-xs vip-text font-bold px-2 py-0.5">⭐ VIP</span>}
-        {isHot && <span className="badge bg-red-900/90 border border-red-600 text-red-300 hot-badge text-xs px-2 py-0.5">🔥 HOT</span>}
-        {isNew && <span className="badge bg-green-900/90 border border-green-600 text-green-300 text-xs px-2 py-0.5">✨ MỚI</span>}
-        {account.status === 'sold' && <span className="badge bg-black/90 border border-gray-600 text-gray-400 text-xs px-2 py-0.5">Đã bán</span>}
-      </div>
+    <Link to={`/tai-khoan/${account.id}`}
+      className="relative rounded-xl overflow-hidden flex flex-col group"
+      style={{background:'#0d1625', border:'1px solid #1e2d40', boxShadow:'0 2px 12px rgba(0,0,0,0.4)', transition:'transform 0.18s,box-shadow 0.18s'}}
+      onMouseEnter={e => { e.currentTarget.style.transform='translateY(-3px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(249,115,22,0.18)'; }}
+      onMouseLeave={e => { e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow='0 2px 12px rgba(0,0,0,0.4)'; }}>
+
+      {/* Corner ribbon badge */}
+      {(isVIP || isHot || isNew) && (
+        <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden z-10 pointer-events-none">
+          <div className={`absolute -top-0.5 -right-5 rotate-45 text-white text-[10px] font-black px-6 py-1 shadow-lg ${
+            isVIP ? 'bg-yellow-500' : isHot ? 'bg-red-500' : 'bg-green-500'}`}>
+            {isVIP ? 'VIP' : isHot ? 'HOT' : 'NEW'}
+          </div>
+        </div>
+      )}
       {discount > 0 && (
-        <div className="absolute top-2 right-2 z-10 bg-red-600 text-white text-xs font-black px-2 py-0.5 rounded-md shadow-lg">
+        <div className="absolute top-2 left-2 z-10 bg-red-600 text-white text-xs font-black px-2 py-0.5 rounded shadow-lg">
           -{discount}%
         </div>
       )}
 
-      {/* Art area */}
-      <div className="relative h-36 overflow-hidden flex-shrink-0">
+      {/* Image / Art area */}
+      <div className="relative h-44 overflow-hidden flex-shrink-0">
         {account.images?.[0] ? (
           <img src={account.images[0]} alt={account.title}
-            className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ${account.status === 'sold' ? 'grayscale opacity-50' : ''}`}/>
+            className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${account.status === 'sold' ? 'grayscale opacity-50' : ''}`}/>
         ) : (
           <div className={`w-full h-full flex items-center justify-center relative bg-gradient-to-br ${classBg}`}>
             <div className="absolute inset-0" style={{background:`radial-gradient(circle at 50% 60%, ${classGlow}, transparent 65%)`}}/>
-            <div className="absolute top-1 right-1 opacity-[0.08]">
-              <Shuriken size={46} className="text-white spin-slow"/>
-            </div>
-            <div className={`relative z-10 text-center ${account.status === 'sold' ? 'opacity-40' : ''}`}>
-              <div className="text-5xl mb-1.5 group-hover:scale-110 transition-transform drop-shadow-lg">
-                {classIcon(account.class_name)}
-              </div>
+            <div className="absolute top-1 right-1 opacity-[0.08]"><Shuriken size={52} className="text-white spin-slow"/></div>
+            <div className={`relative z-10 text-7xl group-hover:scale-110 transition-transform drop-shadow-2xl ${account.status === 'sold' ? 'opacity-30' : ''}`}>
+              {classIcon(account.class_name)}
             </div>
             {account.status === 'sold' && (
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                <span className="text-red-400 font-black text-base border-2 border-red-600/80 px-4 py-1 rounded rotate-[-12deg] bg-black/40">ĐÃ BÁN</span>
+              <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                <span className="text-red-400 font-black text-lg border-2 border-red-600/80 px-5 py-1 rounded rotate-[-12deg] bg-black/40">ĐÃ BÁN</span>
               </div>
             )}
           </div>
         )}
-        <div className="absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-gray-950 to-transparent pointer-events-none"/>
       </div>
 
       {/* Body */}
-      <div className="p-3.5 flex flex-col flex-1">
-        <h3 className="text-white font-bold text-sm leading-snug mb-2.5 line-clamp-2 group-hover:text-primary transition-colors">
+      <div className="p-3 flex flex-col flex-1 border-t border-gray-800/60">
+        <h3 className="text-primary font-black text-sm leading-snug mb-2 line-clamp-2 text-center group-hover:text-orange-300 transition-colors">
           {account.title}
         </h3>
-        <div className="flex flex-wrap gap-1.5 mb-2.5">
+        <div className="flex flex-wrap gap-1 justify-center mb-3">
           {account.server_name && (
             <span className={`text-xs px-2 py-0.5 rounded-md border font-semibold ${serverColor(account.server_name)}`}>
               {account.server_name}
@@ -148,22 +136,23 @@ function NSOCard({ account }) {
             </span>
           )}
         </div>
-        <div className="flex items-end justify-between mt-auto pt-2.5 border-t border-gray-800/50">
-          <div>
-            <p className="text-primary font-black text-xl price-glow leading-none">{formatPrice(account.price)}</p>
+        <div className="mt-auto">
+          <div className="flex items-baseline justify-center gap-2 mb-3">
+            <p className="text-primary font-black text-lg price-glow leading-none">{formatPrice(account.price)}</p>
             {account.original_price > account.price && (
-              <p className="text-gray-600 text-xs line-through mt-0.5">{formatPrice(account.original_price)}</p>
+              <p className="text-gray-600 text-xs line-through">{formatPrice(account.original_price)}</p>
             )}
           </div>
           {account.status === 'available' ? (
-            <button onClick={handleAddToCart}
-              className={`text-xs font-bold px-3 py-2 rounded-lg border transition-all active:scale-95 ${
-                inCart ? 'bg-green-900/40 text-green-400 border-green-800' : 'bg-primary/10 text-primary border-primary/30 hover:bg-primary hover:text-white hover:border-primary'
-              }`}>
-              {inCart ? '✓ Giỏ' : '+ Giỏ'}
+            <button onClick={handleBuyNow}
+              className="w-full py-2.5 rounded-xl font-black text-sm text-black shadow-lg active:scale-95 transition-all"
+              style={{background:'linear-gradient(to bottom, #fbbf24, #d97706)', border:'2px solid #f59e0b', letterSpacing:'0.05em'}}>
+              ⚡ MUA NGAY
             </button>
           ) : (
-            <span className="text-xs text-gray-600 italic">Hết hàng</span>
+            <div className="w-full py-2.5 rounded-xl text-center text-xs text-gray-600 font-bold border border-gray-800 bg-gray-900/40">
+              Hết hàng
+            </div>
           )}
         </div>
       </div>

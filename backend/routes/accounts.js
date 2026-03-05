@@ -3,28 +3,34 @@ const router = express.Router();
 const db = require('../db/database');
 const { authMiddleware, adminMiddleware } = require('../middleware/auth');
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
 
-// Multer setup for image uploads
-const uploadDir = path.join(process.env.UPLOAD_DIR || path.join(__dirname, '../uploads'), 'accounts');
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadDir),
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, `acc_${Date.now()}_${Math.random().toString(36).slice(2)}${ext}`);
-  }
+// Cloudinary config
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key:    process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+// Multer — memory storage (buffer sent to Cloudinary, not saved to disk)
 const upload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024, files: 12 },
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 20 * 1024 * 1024, files: 12 },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) cb(null, true);
     else cb(new Error('Chỉ chấp nhận file ảnh.'));
   }
 });
+
+// Upload buffer to Cloudinary
+function uploadToCloud(buffer, mimetype) {
+  return new Promise((resolve, reject) => {
+    const dataUri = `data:${mimetype};base64,${buffer.toString('base64')}`;
+    cloudinary.uploader.upload(dataUri, { folder: 'accninja' }, (err, result) => {
+      if (err) reject(err); else resolve(result.secure_url);
+    });
+  });
+}
 
 // GET /api/accounts — list with filters & pagination
 router.get('/', (req, res) => {
@@ -119,13 +125,20 @@ router.get('/:id', (req, res) => {
   res.json({ ...acc, related });
 });
 
-// POST /api/accounts/upload-image — upload account image
-router.post('/upload-image', authMiddleware, adminMiddleware, upload.array('images', 12), (req, res) => {
+// POST /api/accounts/upload-image — upload account image to Cloudinary
+router.post('/upload-image', authMiddleware, adminMiddleware, upload.array('images', 12), async (req, res) => {
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({ message: 'Không có file ảnh nào được upload.' });
   }
-  const urls = req.files.map(f => `/uploads/accounts/${f.filename}`);
-  res.json({ urls });
+  try {
+    const urls = await Promise.all(
+      req.files.map(f => uploadToCloud(f.buffer, f.mimetype))
+    );
+    res.json({ urls });
+  } catch (err) {
+    console.error('Cloudinary upload error:', err);
+    res.status(500).json({ message: 'Upload ảnh thất bại. Kiểm tra cấu hình Cloudinary.' });
+  }
 });
 
 module.exports = router;
