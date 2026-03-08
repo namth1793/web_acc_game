@@ -42,11 +42,6 @@ export default function Login() {
         </div>
 
         <div className="card p-8">
-          {/* Demo accounts info */}
-          <div className="bg-blue-900/30 border border-blue-800 rounded-lg p-3 mb-6 text-sm">
-            <p className="text-blue-400 font-medium mb-1">Tài khoản demo:</p>
-            <p className="text-blue-300/80">Admin: admin@tiengame.vn / admin123</p>
-          </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
