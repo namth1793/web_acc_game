@@ -31,8 +31,6 @@ router.post('/', authMiddleware, (req, res) => {
 
     for (const item of items) {
       insertItem.run(orderId, item.account_id, item.price);
-      // Mark account as pending
-      db.prepare("UPDATE accounts SET status = 'pending' WHERE id = ?").run(item.account_id);
     }
 
     return orderId;

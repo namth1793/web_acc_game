@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useCart } from '../contexts/CartContext';
-import api from '../api/axios';
-import { formatPrice } from '../components/AccountCard';
 import toast from 'react-hot-toast';
-import { FiCreditCard, FiCheck } from 'react-icons/fi';
+import { FiCheck, FiCreditCard } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
+import api from '../api/axios';
 import imgVCB from '../assets/VCB.jpg';
 import imgMomo from '../assets/momo.jpg';
+import { formatPrice } from '../components/AccountCard';
+import { useCart } from '../contexts/CartContext';
 
 const PAYMENT_METHODS = [
   { id: 'bank_transfer', label: 'Chuyển khoản ngân hàng', icon: '🏦', desc: 'Vietcombank — quét QR hoặc chuyển thủ công' },
@@ -14,8 +14,8 @@ const PAYMENT_METHODS = [
 ];
 
 const BANK_INFO = {
-  bank_transfer: { bank: 'Vietcombank', account: '1234 5678 90', name: 'NGUYEN VAN A', branch: 'CN Đà Nẵng', img: imgVCB },
-  momo: { phone: '0852 603 710', name: 'Tiền Game VN', img: imgMomo },
+  bank_transfer: { bank: 'Vietcombank', account: '9852 603 710', name: 'NGUYEN VIET TIEN', branch: 'VIET NAM', img: imgVCB },
+  momo: { phone: '0852 603 710', name: 'NGUYEN VIET TIEN', img: imgMomo },
 };
 
 export default function Checkout() {
