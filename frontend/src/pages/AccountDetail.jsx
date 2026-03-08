@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import api from '../api/axios';
-import { useCart } from '../contexts/CartContext';
-import AccountCard, { formatPrice } from '../components/AccountCard';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { FiShoppingCart, FiEye, FiArrowLeft, FiCheck, FiZap, FiShield, FiUser } from 'react-icons/fi';
+import { FiArrowLeft, FiCheck, FiEye, FiShield, FiShoppingCart, FiUser, FiZap } from 'react-icons/fi';
+import { useNavigate, useParams } from 'react-router-dom';
+import api from '../api/axios';
+import AccountCard, { formatPrice } from '../components/AccountCard';
+import { NinjaMask, NinjaVillageBadge, Shuriken } from '../components/NinjaArt';
 import { useAuth } from '../contexts/AuthContext';
-import { Shuriken, NinjaMask, NinjaVillageBadge } from '../components/NinjaArt';
+import { useCart } from '../contexts/CartContext';
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 const CLASS_COLORS = {
@@ -331,7 +331,7 @@ export default function AccountDetail() {
             <div className="rounded-xl border border-gray-800/60 bg-gray-900/30 px-4 py-3 flex items-center gap-3">
               <FiUser size={14} className="text-primary flex-shrink-0"/>
               <p className="text-xs text-gray-400">
-                Cần hỗ trợ? Liên hệ <span className="text-primary font-semibold">Zalo 0901 234 567</span> — phản hồi trong 5 phút
+                Cần hỗ trợ? Liên hệ <span className="text-primary font-semibold">Zalo 0852 603 710</span> — phản hồi trong 5 phút
               </p>
             </div>
           </div>
