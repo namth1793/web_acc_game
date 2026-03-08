@@ -1,5 +1,5 @@
+import { FiFacebook, FiMessageSquare, FiYoutube } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import { FiFacebook, FiYoutube, FiMessageSquare } from 'react-icons/fi';
 
 export default function Footer() {
   return (
@@ -51,20 +51,15 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-white mb-3">Liên Hệ</h4>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li>📧 support@tiengame.vn</li>
-              <li>📞 0901.234.567</li>
+              <li>📞 0852.603.710</li>
               <li>🕐 Hỗ trợ 24/7</li>
-              <li>💬 Zalo: 0901234567</li>
+              <li>💬 Zalo: 0852603710</li>
             </ul>
-            <div className="mt-4 p-3 bg-dark rounded-lg border border-dark-border">
-              <p className="text-xs text-gray-400">Phương thức thanh toán</p>
-              <p className="text-sm font-medium text-white mt-1">💳 ATM • 📱 MoMo • ZaloPay • 🏦 Banking</p>
-            </div>
           </div>
         </div>
 
         <div className="border-t border-dark-border mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
-          <p className="text-gray-500 text-sm">© 2024 ACCNINJA. Tất cả quyền được bảo lưu.</p>
+          <p className="text-gray-500 text-sm">© 2026 ACCNINJA. Tất cả quyền được bảo lưu.</p>
           <p className="text-gray-600 text-xs">Mua bán tài khoản game uy tín, an toàn.</p>
         </div>
       </div>

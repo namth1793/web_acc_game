@@ -8,12 +8,10 @@ import { FiSearch, FiFilter, FiX, FiZap, FiShield, FiTrendingUp } from 'react-ic
 
 // ── Ticker ──
 const TICKER_ITEMS = [
-  '🔥 Vừa bán: Acc NSO S1 Kiếm Sĩ Lv200 Full VIP',
-  '⚡ Flash sale: Server VIP giảm 20%',
-  '🎁 Nạp thẻ từ 200K tặng thêm 40K xu',
-  '✅ Hỗ trợ 24/7 qua Zalo: 0901 234 567',
-  '🥷 Mới về: 5 acc Ninja School Server Mới cực hot',
-  '💎 Tài khoản VIP MAX level 250 đang chờ bạn',
+  '🔥 Vừa bán: Acc NSO SV5 Tiêu Lv130 Full 16 nhiều đồ top vĩnh viễn',
+  '🎁 Nhiều khuyến mãi Hot đang chờ bạn',
+  '✅ Hỗ trợ 24/7 qua Zalo: 0852 603 710',
+  '⚡ Flash sale: Giảm 20% đối với tất cả acc trong ngày hôm nay',
 ];
 
 const STATS = [
@@ -485,19 +483,7 @@ export default function Home() {
         </div>
 
         {/* ── LIVE TABLES ── */}
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-          {/* Lịch sử giao dịch */}
-          <div className="rounded-2xl border border-gray-800 overflow-hidden" style={{background:'#0d1625'}}>
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.7)]"/>
-                <h3 className="font-bold text-white text-sm">Lịch Sử Giao Dịch</h3>
-              </div>
-              <span className="text-xs text-gray-600 italic">Cập nhật tự động</span>
-            </div>
-            <RecentTransactions items={transactions} />
-          </div>
+        <div className="mt-8 grid grid-cols-1 gap-6">
 
           {/* Top nạp thẻ */}
           <div className="rounded-2xl border border-gray-800 overflow-hidden" style={{background:'#0d1625'}}>

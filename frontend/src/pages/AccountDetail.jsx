@@ -165,7 +165,7 @@ export default function AccountDetail() {
             <div className="rounded-2xl overflow-hidden border border-gray-800 mb-3 relative" style={{background:'#0d1625'}}>
               {account.images && account.images[selectedImage] ? (
                 <img src={account.images[selectedImage]} alt={account.title}
-                  className={`w-full aspect-video object-cover ${isSold ? 'grayscale opacity-60' : ''}`}/>
+                  className={`w-full aspect-video object-contain ${isSold ? 'grayscale opacity-60' : ''}`}/>
               ) : (
                 /* Class art placeholder */
                 <div className={`w-full aspect-video flex items-center justify-center relative bg-gradient-to-br ${cls.bg}`}>

@@ -4,20 +4,18 @@ import { useCart } from '../contexts/CartContext';
 import api from '../api/axios';
 import { formatPrice } from '../components/AccountCard';
 import toast from 'react-hot-toast';
-import { FiCreditCard, FiSmartphone, FiCheck } from 'react-icons/fi';
+import { FiCreditCard, FiCheck } from 'react-icons/fi';
+import imgVCB from '../assets/VCB.jpg';
+import imgMomo from '../assets/momo.jpg';
 
 const PAYMENT_METHODS = [
-  { id: 'bank_transfer', label: 'Chuyển khoản ngân hàng', icon: '🏦', desc: 'Vietcombank, VPBank, Techcombank...' },
+  { id: 'bank_transfer', label: 'Chuyển khoản ngân hàng', icon: '🏦', desc: 'Vietcombank — quét QR hoặc chuyển thủ công' },
   { id: 'momo', label: 'Ví MoMo', icon: '📱', desc: 'Quét QR hoặc chuyển tiền MoMo' },
-  { id: 'zalopay', label: 'ZaloPay', icon: '💳', desc: 'Ví ZaloPay' },
-  { id: 'atm', label: 'Thẻ ATM / NAPAS', icon: '💰', desc: 'Thẻ ATM nội địa' },
 ];
 
 const BANK_INFO = {
-  bank_transfer: { bank: 'Vietcombank', account: '1234 5678 90', name: 'NGUYEN VAN A', branch: 'CN Đà Nẵng' },
-  momo: { phone: '0901 234 567', name: 'Tiền Game VN' },
-  zalopay: { phone: '0901 234 567', name: 'Tiền Game VN' },
-  atm: { info: 'Liên hệ admin để được hỗ trợ nạp thẻ ATM' }
+  bank_transfer: { bank: 'Vietcombank', account: '1234 5678 90', name: 'NGUYEN VAN A', branch: 'CN Đà Nẵng', img: imgVCB },
+  momo: { phone: '0852 603 710', name: 'Tiền Game VN', img: imgMomo },
 };
 
 export default function Checkout() {
@@ -62,6 +60,10 @@ export default function Checkout() {
         <div className="card p-6 mb-6">
           <h3 className="font-bold text-white text-lg mb-4">Thông Tin Thanh Toán</h3>
           <div className="bg-dark rounded-lg p-4 space-y-3">
+              {/* QR image */}
+            <div className="flex justify-center mb-3">
+              <img src={info.img} alt="QR thanh toán" className="w-48 h-48 object-contain rounded-xl border border-gray-700 bg-white p-1" />
+            </div>
             {method === 'bank_transfer' && (
               <>
                 <InfoRow label="Ngân hàng" value={info.bank} />
@@ -78,14 +80,6 @@ export default function Checkout() {
                 <InfoRow label="Nội dung" value={content} highlight />
               </>
             )}
-            {method === 'zalopay' && (
-              <>
-                <InfoRow label="Số điện thoại" value={info.phone} highlight />
-                <InfoRow label="Tên" value={info.name} />
-                <InfoRow label="Nội dung" value={content} highlight />
-              </>
-            )}
-            {method === 'atm' && <p className="text-gray-300">{info.info}</p>}
           </div>
           <div className="mt-4 p-3 bg-yellow-900/30 border border-yellow-800 rounded-lg text-sm text-yellow-300">
             ⚠️ Vui lòng ghi đúng nội dung chuyển khoản để được xác nhận tự động. Sau khi chuyển tiền, admin sẽ xác nhận trong vòng 5-15 phút.

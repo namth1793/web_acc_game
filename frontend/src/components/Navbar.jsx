@@ -10,7 +10,6 @@ const NAV_ITEMS = [
   { to: '/dich-vu', label: 'Dịch Vụ' },
   { to: '/nap-the', label: 'Nạp Thẻ' },
   { to: '/tin-tuc', label: 'Tin Tức' },
-  { to: '/nap-atm-vi', label: 'Nạp ATM - Ví' },
 ];
 
 export default function Navbar() {

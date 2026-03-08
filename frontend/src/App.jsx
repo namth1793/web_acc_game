@@ -18,7 +18,6 @@ import Checkout from './pages/Checkout';
 import MyOrders from './pages/MyOrders';
 import Profile from './pages/Profile';
 import NapThe from './pages/NapThe';
-import NapATMVi from './pages/NapATMVi';
 import TinTuc from './pages/TinTuc';
 import Services from './pages/Services';
 
@@ -62,8 +61,7 @@ export default function App() {
             <Route path="/tai-khoan/:id" element={<PublicLayout><AccountDetail /></PublicLayout>} />
             <Route path="/gio-hang" element={<PublicLayout><Cart /></PublicLayout>} />
             <Route path="/nap-the" element={<PublicLayout><NapThe /></PublicLayout>} />
-            <Route path="/nap-atm-vi" element={<PublicLayout><NapATMVi /></PublicLayout>} />
-            <Route path="/tin-tuc" element={<PublicLayout><TinTuc /></PublicLayout>} />
+<Route path="/tin-tuc" element={<PublicLayout><TinTuc /></PublicLayout>} />
             <Route path="/dich-vu" element={<PublicLayout><Services /></PublicLayout>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
